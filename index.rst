@@ -1,19 +1,15 @@
-Creating a blog in Symfony2
+在 Symfony2 建立一个博客
 ===========================
 
-Introduction
+介绍
 ------------
 
-This tutorial will guide you through the process of creating a full featured
-blogging website using `Symfony2 <http://symfony.com/>`_. The Standard
-Distribution of the Symfony2 framework will be used, which includes the main
-components you will need when building your own websites. The tutorial is split
-into a number of parts, each part covering different aspects of Symfony2 and its
-components. This tutorial is aimed to be worked through similar to the
-symfony 1 `Jobeet <http://www.symfony-project.org/jobeet/1_4/Doctrine/en/>`_
-tutorial.
+本教程通过建立一个完整功能的博客网站来引导你使用 `Symfony2 <http://symfony.com/>`_框架。
+教程使用的是 Symfony2 的标准版本，它包含了在建立你自己网站时需要的主要组件。本教程分为多个部分
+，涵盖了 Symfony2 的各项特征与组件。本教程参考了 symfony 1 的
+`Jobeet <http://www.symfony-project.org/jobeet/1_4/Doctrine/en/>`_ 并以类似的方式编写。
 
-Tutorial Parts
+教程章节
 ~~~~~~~~~~~~~~
 
 .. toctree::
@@ -26,87 +22,80 @@ Tutorial Parts
     docs/customising-the-view-more-with-twig
     docs/testing-unit-and-functional-phpunit
 
-Demo Website
+演示网站
 ------------
 
-The symblog website can be viewed at
-`http://symblog.co.uk <http://symblog.co.uk/>`_. The source code is
-available via `Github <https://github.com/dsyph3r/symblog>`_. It follows
-along with each part of the tutorial
+本网站 symblog 可以在 `http://symblog.co.uk <http://symblog.co.uk/>`_ 浏览，源代码存放在
+`Github <https://github.com/dsyph3r/symblog>`_ ，按照教程的内容划分。
 
-Coverage
+涵盖范围
 --------
 
-This tutorial aims to cover the common tasks you are faced with when creating
-websites using Symfony2.
+本教程的目标是介绍你在使用 Symfony2 构建网站常会遇到的任务。
 
-    1.  Bundles
-    2.  Controllers
-    3.  Templating (Using TWIG)
-    4.  Model - Doctrine 2
-    5.  Migrations
-    6.  Data Fixtures
-    7.  Validators
-    8.  Forms
-    9.  Routing
-    10. Asset Management
-    11. Emailing
-    12. Environments
-    13. Customising Error pages
-    14. Security
-    15. The User & Sessions
-    16. CRUD Generation
-    17. Caching
-    18. Testing
-    19. Deployment
+    1.  软件包(Bundle)
+    2.  控制器(Controllers)
+    3.  模板(Using TWIG)
+    4.  模型 - Doctrine 2
+    5.  迁移
+    6.  数据固件
+    7.  验证
+    8.  表单
+    9.  路由
+    10. 资源管理
+    11. 发送邮件
+    12. 环境
+    13. 自定义错误页
+    14. 安全
+    15. 用户与会话
+    16. 生成增删改查骨架
+    17. 缓存
+    18. 测试
+    19. 部署
 
-Symfony2 is highly customisable and provides a number of different ways to
-perform the same task. Some examples of this include writing configuration
-options in YAML, XML, PHP, or Annotation, and creating templates using Twig or
-PHP. To keep this tutorial simple we will use YAML and Annotations for
-configuration and Twig for templating. The
-`Symfony book <http://symfony.com/doc/current/book/index.html>`_
-provides a great resource for examples of how to use the other methods.
-If other people would like to contribute to the completion of alternative methods
-simply fork the repository on `Github <https://github.com/dsyph3r/symblog-docs>`_
-and send over the pull requests :)
+Symfony2 可以高度定制，并提供许多不同的途径完成同样的工作，像是配置文件格式的选择有 YAML 、 XML 、
+PHP 或注释，建立模板可以使用 Twig 或 PHP 。为了保持教程的简洁，我们会使用 YAML 与注释格式，
+，模板则是 Twig 。 `Symfony 手册 <http://symfony.com/doc/current/book/index.html>`_ 提供了
+丰富的资源与范例，来说明如何使用其他方法。如果有人想要参与完成这个教学或提供其他方式，只需要在
+`Github <https://github.com/dsyph3r/symblog-docs>`_ 建立一个衍生版本，然后发出 pull requests。
 
-Translations
+
+翻译
 ------------
 
-Spanish
+
+西班牙语
 ~~~~~~~
 
-Symblog has been translated into `Spanish <http://symblog.site90.net/>`_ thanks to the contribution by
-`Lisper <https://twitter.com/#!/esymfony>`_.
+Symblog 由 `Lisper <https://twitter.com/#!/esymfony>`_ 翻译成 `西班牙语 <http://symblog.site90.net/>`_ 。
 
-French
+法语
 ~~~~~~~
 
-Symblog has been translated into `French <http://keiruaprod.fr/symblog-fr/>`_ thanks to the contribution by
-`Clement Keirua <https://twitter.com/clemkeirua>`_.
+Symblog 由 `Clement Keirua <https://twitter.com/clemkeirua>`_ 翻译为 `法语 <http://keiruaprod.fr/symblog-fr/>`_ 。
 
-Portuguese
+
+葡萄牙语
 ~~~~~~~~~
-
-Symblog has been translated into `Brazilian Portuguese <http://symfony2blog.totlab.com.br/>`_  thanks to the contribution by 
-`TotLab - Pesquisa e Desenvolvimento Web <http://totlab.com.br>`_.
+Symblog 由 `TotLab - Pesquisa e Desenvolvimento Web <http://totlab.com.br>`_ 翻译为 `葡萄牙语(巴西) <http://symfony2blog.totlab.com.br/>`_ 。
 
 
-Author
+简体中文
+~~~~~~~~~
+Symblog 由 `michaeljayt <https://github.com/michaeljayt/symblog-docs-zh-cn/>`_ 翻译为 `简体中文 <https://github.com/michaeljayt/symblog-docs-zh-cn/>`_ 。
+
+
+作者
 ------
 
-This tutorial is being created by `dsyph3r <http://twitter.com/#!/dsyph3r>`_.
+本教程由 `dsyph3r <http://twitter.com/#!/dsyph3r>`_ 建立。
 
-Contributing
+贡献
 ------------
 
-The `source <https://github.com/dsyph3r/symblog-docs>`_ for this tutorial is available on
-Github. If you would like to improve and extend this tutorial simply fork the
-project and send over the pull requests. You can also raise issues using the
-`GitHub Issue Tracker <https://github.com/dsyph3r/symblog-docs/issues>`_. If any
-one is interested in creating a much more visually pleasing design please get in
-`touch <http://twitter.com/#!/dsyph3r>`_!
+本教程的 `源代码 <https://github.com/dsyph3r/symblog-docs>`_ 放在 Github 上，如果你想要改进或者
+扩展本教程，只要建立一个衍生版本，然后发出回推请求。你也可以用 `GitHub Issue Tracker <https://github.com/dsyph3r/symblog-docs/issues>`_
+发表问题。如果你对于改善本教程的的视觉设计感兴趣，请 `与我联系 <http://twitter.com/#!/dsyph3r>`_!
 
 Credits
 -------
@@ -115,9 +104,9 @@ Special thanks to all the contributors of the
 `Official Symfony2 documentation <http://symfony.com/doc/current/>`_. This
 provided an invaluable resource of information.
 
-Flag Icons sourced from `famfamfam <http://www.famfamfam.com/lab/icons/flags/>`_.
+国旗图示来自 `famfamfam <http://www.famfamfam.com/lab/icons/flags/>`_ 。
 
-Searching
+查找
 ---------
 
-Looking for a specific topic? Use the :ref:`search`.
+在查找一个特定主题吗？使用 :ref:`search` 。
