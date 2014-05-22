@@ -1,69 +1,51 @@
-[Part 1] - Symfony2 Configuration and Templating
+[Part 1] - Symfony2 配置与模板
 ================================================
 
-Overview
+总览
 --------
 
-This chapter will cover the first steps when creating a Symfony2 website.
-We will download and configure the Symfony2
-`Standard Distribution <http://symfony.com/doc/current/glossary.html#term-distribution>`_,
-create the Blog bundle and put together the main HTML templates. At the end
-of this chapter you will have configured a Symfony2 website that
-will be available via a local domain, eg ``http://symblog.dev/``. The website will
-contain the main HTML structure of the blog along with some dummy content.
+这一节将会介绍建立 Symfony2 网站的几个步骤，这里下载和使用的是 Symfony2
+`标准版 <http://symfony.com/doc/current/glossary.html#term-distribution>`_,
+我们将使用这个版本建立博客软件包(Bundle)以及存放主模板。在本节结束后，你将制作出一个配置好的 Symfony2 网站，
+能够通过类似 ``http://symblog.dev/`` 的开发用域名访问。这个网站会包含博客的主要网页结构及部分测试信息。
 
-The following areas will be demonstrated in this chapter:
+本节将会展示如下主题：
 
-    1. Setting up a Symfony2 application
-    2. Configuring a development domain
-    3. Symfony2 Bundles
-    4. Routing
-    5. Controllers
-    6. Templating with Twig
+    1. 安装一个 Symfony2 应用
+    2. 配置一个开发用域名
+    3. Symfony2 软件包
+    4. 路由
+    5. 控制器
+    6. 使用 Twig 制作模板
 
-Download and Setup
+下载与安装
 ------------------
 
-As stated above we will be using the Symfony2 Standard Distribution. This
-distribution comes complete with the Symfony2 core libraries and the most common
-bundles required to create websites. You can
-`Download <http://symfony.com/download>`_ the Symfony2 package from the Symfony2 website.
-As I don't want to repeat the excellent documentation provided by the Symfony2 book,
-please refer to the
-`Installing and Configuring Symfony2 <http://symfony.com/doc/current/book/installation.html>`_
-chapter for detailed requirements. This will guide you through the process of
-which package to download, how to install the required vendors, and how to
-correctly permission folders.
+如同上面提到的那样，我们会使用 Symfony2 标准版。这个版本包含了完整的核心函数库与建立大多数网站所需要的
+软件包。你可以从官方网站 `下载 <http://symfony.com/download>`_ 。本教程不希望重复官方网站上的
+在线手册说明，所以请先参考官方网站的 `安装与配置 Symfony2 <http://symfony.com/doc/current/book/installation.html>`_
+一节了解如何配置环境。在线手册会引导你下载选择软件包、安装必要外部软件包与设置文件夹的权限等。
 
 .. warning::
 
-    It is important to pay special attention to the
-    `Setting up Permissions <http://symfony.com/doc/current/book/installation.html#configuration-and-setup>`_
-    section in the Installation chapter. This explains the various ways you
-    should permission the ``app/cache`` and ``app/logs`` folders so the web
-    server user and command line user have write access to them.
+    需要特别注意的是安装说明的 `配置权限 <http://symfony.com/doc/current/book/installation.html#configuration-and-setup>`_
+    部分，此处会说明一些设定 ``app/cache`` 与 ``app/logs`` 权限的方法，让 web 服务器用户与命令行用户都能有写入的权限。
+    
 
-Creating a Development Domain
+建立一个开发用域名
 -----------------------------
 
-For the purpose of this tutorial we will be using the local domain
-``http://symblog.dev/``, however you can choose any domain you want. These
-instructions are specific to `Apache <http://httpd.apache.org/>`_ and assume you
-already have Apache setup and running on your machine. If you are comfortable
-with setting up local domains, or use a different web server such as
-`nginx <http://nginx.net/>`_ you can skip this section.
+本教程中会使用开发用域名 ``http://symblog.dev/`` ，不过你可以选择自己想要使用的域名。
+下列步骤主要针对 `Apache <http://httpd.apache.org/>`_ 服务器说明，同时假设你已经在自己主机安装好并且正在运行
+Apache。如果你已经知道如何设定开发用域名，或是使用了类似 `nginx <http://nginx.net/>`_ 的网页服务器，你也可以跳过此部分。
 
 .. note::
 
-    These steps were performed on the Linux distribution Fedora so
-    path names, etc, may differ depending on your Operating System.
+    这些步骤是在特定的 Linux 发行版 Fedora 中完成的，因此路径名称等信息可能会跟你的操作系统不一样。
 
-Lets begin by creating a virtual host with Apache. Locate the Apache configuration
-file and append the following settings, making sure to change the ``DocumentRoot``
-and ``Directory`` paths accordingly. The location and name of
-the Apache configuration can vary a lot depending on your OS. In Fedora
-its located at ``/etc/httpd/conf/httpd.conf``. You will need to edit this file with
-``sudo`` privileges.
+首先，要开始建立一个 Apache 的虚拟主机，要找到 Apache 的配置文件，在文件的最后添加以下配置。请依据自己的环境调整
+``DocumentRoot`` 与 ``Directory`` 的路径，Apache 配置文件的位置与名称会因操作系统的不同而有所差异，
+ Fedora 系统放在 ``/etc/httpd/conf/httpd.conf`` ，编辑此文件需要通过 ``sudo`` 提升权限才能进行。
 
 .. code-block:: text
 
@@ -81,17 +63,14 @@ its located at ``/etc/httpd/conf/httpd.conf``. You will need to edit this file w
       </Directory>
     </VirtualHost>
 
-
-Next add a new domain to the bottom of the host file located at ``/etc/hosts``.
-Again, you will need to edit this file with ``sudo`` privileges.
+接著在 ``/etc/hosts`` 文件的最下面新增一条域名规则，编辑此文件同样需要通过 ``sudo`` 提升权限才能进行。
 
 .. code-block:: text
 
     # /etc/hosts
     127.0.0.1     symblog.dev
 
-Lastly don't forget to restart the Apache service. This will reload the
-updated configuration settings we have made.
+最后，请不要忘记重启 Apache 服务，才会重新加载刚才改动的配置。
 
 .. code-block:: bash
 
@@ -99,105 +78,76 @@ updated configuration settings we have made.
 
 .. tip::
 
-    If you find yourself creating virtual domains all the time, you can simplify
-    this process by using
-    `Dynamic virtual hosts <http://blog.dsyph3r.com/2010/11/apache-dynamic-virtual-hosts.html>`_.
+    如果发现自己经常建立虚拟主机，还可以参考 `Dynamic virtual hosts <http://blog.dsyph3r.com/2010/11/apache-dynamic-virtual-hosts.html>`_
+    的有关说明简化这些步骤。
 
-You should now be able to visit ``http://symblog.dev/app_dev.php/``.
+你现在应该可以访问到 ``http://symblog.dev/app_dev.php/`` 了。
 
 .. image:: /_static/images/part_1/welcome.jpg
     :align: center
     :alt: Symfony2 welcome page
 
-If this is your first visit to the Symfony2 welcome page, take some time to view
-the demo pages. Each demo page provides code snippets that demonstrate how each
-page works behind the scenes.
+如果这是你第一次看到 Symfony2 的欢迎页面，也可以花些时间看看每个示例，这些页面会提供相关代码来展示
+网页背后的运作原理。
 
 .. note::
 
-    You will also notice a toolbar at the bottom of the welcome screen. This
-    is the developer toolbar and provides you will invaluable information
-    about the state of the application. Information including the page execution time,
-    memory usage, database queries, authentication state and much more
-    can be viewed from this toolbar. By default the toolbar is only visible when
-    running in the ``dev`` environment, as providing the toolbar in production
-    would be a big security risk as it exposes a lot of the internals of your
-    application. References to the toolbar will be made through this tutorial
-    as we introduce new features.
+    你同时也会发现在欢迎页下方有一个工具栏。这是一系列开发者工具，可以向你提供许多有关应用程序状态的重要信息。
+    通过此工具栏可以看到包括页面执行时间、内存使用量、数据库查询、认证状态等等信息。这个工具栏默认
+    只会在运行 ``dev`` 环境时显示，而在生产环境中，提供这个工具栏会造成很大的安全风险，因为它揭露了应用程
+    序的许多细节。工具栏的参考信息会在介绍新功能时提到。
 
-Configuring Symfony: Web Interface
+配置 Symfony: Web 界面
 ----------------------------------
 
-Symfony2 introduces a web interface to configure various aspects regarding the
-website such as database settings. We require a database for this project so
-lets begin using the configurator.
 
-Visit ``http://symblog.dev/app_dev.php/`` and click the Configure button. Enter
-the details to setup the database (this tutorial assumes the use of MySQL, but
-you can choose any other database you have access to), followed by generating a
-CSRF token on the next page. You will be presented with the parameter settings
-that Symfony2 has generated. Pay attention to the notice on the page, it is
-likely that your ``app/config/parameters.ini`` file is not writable so you will need to
-copy and paste the settings to the file located at ``app/config/parameters.ini`` (These
-settings can replace the existing settings in this file).
+Symfony2 添加了一个网页界面来进行网站的多项设定，例如数据库。我们这个项目会需要一个数据库，所以现在就要开始使用这个配置工具。
+
+浏览 ``http://symblog.dev/app_dev.php/`` 并且点击 Configure 按钮，进入数据库详细配置（本教程假设使用 MySQL
+数据库，不过你可以选择任何可用的数据库），接下来在下一页会产生一个 CSRF token，你会看到 Symfony2 生成的
+各种参数。注意此页面上的说明，如果你的 ``app/config/parameters.ini`` 文件无法直接写入，就需要将页面显示的配置信息复制到 ``app/config/parameters.ini`` 文件（直接覆盖文件中的原有配置）。
 
 
-Bundles: Symfony2 Building Blocks
+软件包：构成 Symfony2 的基石
 ----------------------------------
 
-Bundles are the basic building block of any Symfony2 application, in fact the
-Symfony2 framework is itself a bundle. Bundles allow us to separate
-functionality to provide reusable units of code. They encapsulate the entire
-needs to support the bundles purpose including the controllers, the model,
-the templates, and the various resources such as images and CSS. We will create
-a bundle for our website in the namespace Blogger. If you are not familiar with
-namespaces in PHP you should spend some time reading up on them as they are
-heavily used in Symfony2, everything is namespaced. See the
+软件包是任何 Symfony2 应用的基石，而事实上 Symfony2 框架本身也是个软件包。软件包让我们可以分离各项功能
+提供可复用的代码单位。它封装了整个软件包所需要的东西，用来提供特定的功能。它包含控制器、模型和模板等
+代码，以及许多像是图片、CSS 一类的资源。我们会建立一个使用 Blogger 命名空间的软件包来制作网站。如果
+你不熟悉 PHP 的命名空间，你应该花些时间去阅读相关文档，因为 Symfony2 中大量使用到了命名空间。可以参考
 `Symfony2 autoloader <http://symfony.com/doc/current/cookbook/tools/autoloader.html>`_
-for specific details on how Symfony2 achieves autoloading.
+了解 Symfony2 如何实现自动载入(Autoloading)功能。
 
 .. tip::
 
-    A good understanding of namespaces can help eliminate common problems you may face
-    when folder structures do not correctly map to namespace structures.
+    切实了解命名空间有助于排除一些常见问题，比如文件夹结构与命名空间结构不一致等问题。
 
-Creating the bundle
+
+建立软件包
 ~~~~~~~~~~~~~~~~~~~
 
-To encapsulate the functionality for the blog we will create a Blog bundle.
-This will house all the required files and so could easily be dropped into another
-Symfony2 application. Symfony2 provides a number of tasks to assist us when performing common
-operations. One such task is the bundle generator.
+为了封装博客的功能，我们要建立一个 Blog 软件包。它将包含所有需要的文件，这样一来可以轻易的将这个软件包移植到另一个
+Symfony2 应用程序中。Symfony2 提供了许多工具来协助我们执行常规任务，其中一个就是软件包生成器。
 
-To start the bundle generator run the following command. You will be presented
-with a number of prompts that allow you to configure the way the bundle is setup.
-The default for each prompt should be used.
+要执行软件包生成器请执行下列命令，屏幕上会出现一些提示，让你设置软件包的配置信息。我们这里就使用各项提示的默认值。
 
 .. code-block:: bash
 
     $ php app/console generate:bundle --namespace=Blogger/BlogBundle --format=yml
 
-Upon completion of the generator Symfony2 will have constructed the basic bundle
-layout. A few important changes need to be noted here.
+生成器执行后，Symfony2 会为软件包建立基本的文件目录结构，这里需要注意一些重要的改动。
 
 .. tip::
 
-    You don't have to use the generator tasks that Symfony2 provides, they are simply
-    there to assist you. You could have manually created the Bundle folder structure
-    and files. While it is not mandatory to use the generators, they do provide some benefits
-    such as they are quick to use and perform all tasks required to get the bundle
-    up and running. One such example is registering the bundle.
+    其实并不一定要使用 Symfony2 提供的生成器工具，它们只是起到了一些辅助作用，你完全可以手动建立软件包的
+    文件夹结构与文件。虽然这么说，使用生成器还是有好处的，比如可以快速的执行所有必要工作——生成软件包并执行相应命令。这其中一个例子就是注册软件包。
 
-Registering the bundle
+注册软件包
 ......................
 
-Our new bundle ``BloggerBlogBundle`` has been registered in the Kernel located at
-``app/AppKernel.php``. Symfony2 requires us to register all bundles that the application
-needs to use. You will also notice that some bundles are only registered when in
-the ``dev`` or ``test`` environments. Loading these bundles in the ``prod``
-(production) environment would introduce additional overhead for functionality
-that wouldn't be used. The snippet below shows how the ``BloggerBlogBundle`` has
-been registered.
+
+我们的新软件包 ``BloggerBlogBundle`` 已经注册在核心文件 ``app/AppKernel.php`` 中，Symfony2 要求我们明确注册所有要使用的软件包，你也会注意到一些软件包只在 ``dev`` 或 ``test`` 环境下注册，在正式环境 ``prod`` 中载入这些软
+件包会加载一些用不到的功能，而徒增系统负担。下面这段代码显示如何注册 ``BloggerBlogBundle`` 。
 
 .. code-block:: php
 
@@ -218,11 +168,10 @@ been registered.
         // ..
     }
 
-Routing
+路由
 .......
 
-The bundle routing has been imported into the applications main
-routing file located at ``app/config/routing.yml``.
+软件包的路由配置已经导入到应用程序的主路由文件 ``app/config/routing.yml`` 中。
 
 .. code-block:: yaml
 
@@ -231,36 +180,26 @@ routing file located at ``app/config/routing.yml``.
         resource: "@BloggerBlogBundle/Resources/config/routing.yml"
         prefix:   /
 
-The prefix option allows us to mount the entire ``BloggerBlogBundle`` routing
-with a prefix. In our case we have opted to mount at the default which is ``/``.
-If for example you would like all routes to be prefixed with ``/blogger`` change
-the prefix to ``prefix: /blogger``.
+prefix 选项可以让我们将整个 ``BloggerBlogBundle`` 路由在挂载时带上前缀，例子中已经选择挂载在预设的 ``/`` 上。
+如果你想要所有的路由以 ``/blogger`` 开头，可以将 prefix 改为 ``prefix: /blogger`` 。
 
-Default structure
+默认结构
 .................
 
-Under the ``src`` directory the default bundle layout has been created. This
-starts at the top level with the ``Blogger`` folder which maps directly to
-the ``Blogger`` namespace we have created our bundle in. Under this we have the
-``BlogBundle`` folder which contains the actual bundle. The contents of this folder
-will be examined as we work through the tutorial. If your familiar with MVC
-frameworks, some of the folders will be self explanatory.
+ ``src`` 文件夹中已经建立了默认的软件包结构，一开始是最上层的 ``Blogger`` 文件夹，它直接对应到我们为软件包设置的
+ ``Blogger`` 命名空间，其中还可以看到包含实际软件包的 ``BlogBundle`` 文件夹，这里面内容结构中有一部分名称自身就解释了自己的用途。
 
-The Default Controller
+默认控制器
 ~~~~~~~~~~~~~~~~~~~~~~
 
-As part of the bundle generator, Symfony2 has created a default controller. We
-can run this controller by going to
-``http://symblog.dev/app_dev.php/hello/symblog``. You should see a simple
-greeting page. Try changing the ``symblog`` part of the URL to your name.
-We can examine at a high level how this page was generated.
+在软件包生成器生成的文件中， Symfony2 建立了一个默认的控制器，我们可以通过浏览
+ ``http://symblog.dev/app_dev.php/hello/symblog`` 来执行它。你可以在浏览器中看到一个简单的欢迎页面。请试着将网址 ``symblog`` 部分改为你想要的名称，我们就可以在比较高的层次上检查页面的生成情况。
 
-Routed
+路由
 ......
 
-The ``BloggerBlogBundle`` routing file located at
-``src/Blogger/BlogBundle/Resources/config/routing.yml`` contains the following
-routing rule.
+ ``BloggerBlogBundle`` 的路由文件放在 ``src/Blogger/BlogBundle/Resources/config/routing.yml`` ，包含了下面的
+默认路由规则。
 
 .. code-block:: yaml
 
@@ -269,40 +208,24 @@ routing rule.
         pattern:  /hello/{name}
         defaults: { _controller: BloggerBlogBundle:Default:index }
 
-The routing is composed of a pattern and a some default options. The pattern is
-checked against the URL, and the default options specify the controller to
-execute if the route matches. In the pattern ``/hello/{name}``, the ``{name}``
-placeholder will match any value as no specific requirements have been set. The
-route also doesn't specify any culture, format or HTTP methods. As no HTTP
-methods have been set, requests from GET, POST, PUT, etc will all be eligible
-for pattern matching.
+路由包含一项匹配模式与一组默认选项，模式用来匹配对应的网址，默认选项则指定在网址匹配时应该要执行的控制器。在模式
+ ``/hello/{name}`` 中， ``{name}`` 占位符没有配置特殊条件，所以对应任意字符。路由也没有指定任何国别(culture)、格式或 HTTP 方法。而没有指定 HTTP 方法，就表示来自 GET 、 POST 、 PUT 等方式的请求都会匹配到该模式。
 
-If the route meets all the specified criteria it will be executed by the
-_controller option in defaults. The _controller option specifies the
-Logical Name of the controller which allows Symfony2 to map this to a specific file.
-The above example will cause the ``index`` action in the ``Default`` controller
-located at ``src/Blogger/BlogBundle/Controller/DefaultController.php`` to be executed.
+如果网址符合所有指定的条件，就会执行配置选项 _controller 中的控制器， _controller 选项指定了控制器的逻辑名，让
+Symfony2 可以对应到指定的文件。上面的例子中会执行 ``Default`` 控制器中的 ``index`` 操作，文件位于
+ ``src/Blogger/BlogBundle/Controller/DefaultController.php`` 。
 
-The Controller
+控制器
 ..............
 
-The controller in this example is very simple. The ``DefaultController`` class
-extends the ``Controller`` class which provides some helpful methods such as the ``render``
-method used below. As our route defines a placeholder it is passed into the
-action as the argument ``$name``. The action does nothing more than
-call the ``render`` method specifying the ``index.html.twig`` template
-in the ``BloggerBlogBundle`` Default view folder to be rendered. The
-format of the template name is ``bundle:controller:template``. In
-our example this is ``BloggerBlogBundle:Default:index.html.twig``
-which maps to the ``index.html.twig`` template, in the ``Default``
-views folder of the ``BloggerBlogBundle``, or physically to the file
-``src/Blogger/BlogBundle/Resources/views/Default/index.html.twig``. Different
-variations of the template format can be used to render templates
-at different locations within the application and its bundles. We will see
-this later in the chapter.
+本例中的控制器非常简单， ``DefaultController`` 继承了 ``Controller`` 类，提供了一些有用的方法，例如下面用到的
+``render`` 方法。由于我们的路由定义了一个占位符 ``$name`` ，它会被送到相应的方法中作为参数。 ``index`` 方法会调用 ``render``
+方法来指定位于 ``BloggerBlogBundle`` 默认模板文件夹中的 ``index.html.twig`` 模板显示内容。模板名称的格式是
+``bundle:controller:template`` ，在我们的例子中， ``BloggerBlogBundle:Default:index.html.twig`` 会对应到 ``BloggerBlogBundle``
+ ``Default`` 模板文件夹的 ``index.html.twig`` 模板文件，这个文件实际路径为
+``src/Blogger/BlogBundle/Resources/views/Default/index.html.twig`` 。应用和软件包可以在渲染模板时指定多种模板格式，本节后面会做相应介绍。
 
-We also pass over the ``$name`` variable to the template via the ``array``
-options.
+我们也可以通过 ``array`` 选项将变量 ``$name`` 传递到模板。
 
 .. code-block:: php
 
@@ -321,67 +244,50 @@ options.
         }
     }
 
-The Template (The View)
+模板 (视图)
 .......................
 
-As you can see the template is very simple. It prints out Hello followed
-by the name argument passed over from the controller.
+如你所见，这个模板非常简单，它只会打印出 Hello 以及控制器传送过来的 name 参数。
 
 .. code-block:: html
 
     {# src/Blogger/BlogBundle/Resources/views/Default/index.html.twig #}
     Hello {{ name }}!
 
-Cleaning up
+清理
 ~~~~~~~~~~~
 
-As we don't need some of the default files created by the generator we can clean
-these up.
+由于我们不需要生成器生成出的某些文件，可以去清理这些文件。
 
-The controller file ``src/Blogger/BlogBundle/Controller/DefaultController.php``
-can be deleted, along with the view folder and its content at
-``src/Blogger/BlogBundle/Resources/views/Default/``. Finally remove the route
-defined at ``src/Blogger/BlogBundle/Resources/config/routing.yml``
+控制器文件 ``src/Blogger/BlogBundle/Controller/DefaultController.php`` 是可以删除的，模板文件夹
+``src/Blogger/BlogBundle/Resources/views/Default/`` 与其中的内容也可以删除，而最后，需要删除定义在
+``src/Blogger/BlogBundle/Resources/config/routing.yml`` 的路由信息。
 
-Templating
+模板
 ----------
 
-We have 2 options by default when using Symfony2 for templating;
-`Twig <http://www.twig-project.org/>`_ and PHP. You could of course use neither of
-these and opt for a different library. This is possible thanks to Symfony2
-`Dependency Injection Container <http://symfony.com/doc/current/book/service_container.html>`_.
-We will be using Twig as our templating engine for a number of reasons.
+在 Symfony2 中，模板引擎默认有 `Twig <http://www.twig-project.org/>`_ 与 PHP 两中选择，不同的函数库可以有不同的选择，这要感谢 Symfony2 实现了 `依赖注入容器 <http://symfony.com/doc/current/book/service_container.html>`_
+基于下面理由，我们选择使用 Twig 模板引擎：
 
-1. Twig is fast - Twig templates compile down to PHP classes so there is very little
-   overhead to use Twig templates.
-2. Twig is concise - Twig allows us to perform templating functionality in very little
-   code. Compare this to PHP where some statements become very verbose.
-3. Twig supports template inheritance - This is one of my personal favorites.
-   Templates have the ability to extend and override other templates allowing children
-   templates to change the defaults provided by their parents.
-4. Twig is secure - Twig has output escaping enabled by default and even provides a sand
-   boxed environment for imported templates.
-5. Twig is extensible - Twig comes will a lot of common core functionality that
-   you'd expected from a templating engine, but for those occasions where you need
-   some extra bespoke functionality, Twig can be easily extended.
+1. Twig 非常快，Twig 模板会被编译成普通 PHP 对象，所以使用 Twig 模板不会造成太大的负担。
+2. Twig 非常简洁， Twig 让我们可以通过少量代码执行模板功能， PHP 模板在部分情况下则会相对冗长。
+3. Twig 支援模板继承，这是笔者个人喜爱的特色之一。模板能够继承与重写其他模板，让子模板可以修改来自父模板的默认值。
+4. Twig 非常安全， Twig 默认启用了输出的检查，甚至还为导入的模板提供了一个沙箱环境。
+5. Twig 容易扩展，Twig 带来了许多你期待模板所拥有的常见核心功能，而其他的功能 Twig 也可以轻易地写出扩展。
 
-These are just some of the benefits of Twig. For more reasons why you should use
-Twig see the official `Twig <http://www.twig-project.org/>`_ site.
+这只是使用 Twig 的部分好处，更多采用 Twig 的理由，可以参考 `Twig <http://www.twig-project.org/>`_ 官方网站。
 
-Layout Structure
+布局结构
 ~~~~~~~~~~~~~~~~
 
-As Twig supports template inheritance, we are going to use the
-`Three level inheritance <http://symfony.com/doc/current/book/templating.html#three-level-inheritance>`_
-approach. This approach allows us to modify the view at 3 distinct levels within the
-application, giving us plenty of room for customisations.
+由于 Twig 支援模板继承，我们接下来将使用 `三层继承 <http://symfony.com/doc/current/book/templating.html#three-level-inheritance>`_
+方法，让我们可以在应用程序中通过三个独立的层次调整视图，提供更多的定制性。
 
-Main Template - Level 1
+主模板 - 第 1 层
 .......................
 
-Lets start by creating our basic block level template for symblog. We need 2
-files here, the template and the CSS. As Symfony2 supports
-`HTML5 <http://diveintohtml5.org/>`_ we will also be using it.
+现在就开始建立 symblog 的基本区域模板层。这里需要用到两种文件，模板与 CSS 文件。由于 Symfony2 支持 `HTML5 <http://diveintohtml5.org/>`_
+，我们也会使用到它。
 
 .. code-block:: html
 
@@ -443,32 +349,23 @@ files here, the template and the CSS. As Symfony2 supports
 
 .. note::
 
-    There are 3 external files pulled into the template, 1 JavaScript and 2 CSS.
-    The JavaScript file fixes the lack of HTML5 support in IE browsers pre version
-    9. The 2 CSS files import fonts from
-    `Google Web font <http://www.google.com/webfonts>`_.
+    模板中引用了三个外部文件， 1 个 JavaScript 与 2 个 CSS，这个 JavaScript 脚本修正了 IE9 以前的版本不支持
+    HTML5 的问题， 2 个导入的 CSS 文件是来自 `Google Web font <http://www.google.com/webfonts>`_ 的字体。
+    
+此模板标示了博客网站的主要结构。大部分的模板由 HTML 组成，并包含少量的 Twig 指令，我们接下来将查看这些 Twig 指令。
 
-This template marks up the main structure of our blogging website. Most
-of the template consists of HTML, with the odd Twig directive. Its these
-Twig directives that we will examine now.
-
-We will start by focusing on the document HEAD. Lets look at the title:
+先将焦点放在文件的 HEAD 标签部分，从 title 标签开始：
 
 .. code-block:: html
 
     <title>{% block title %}symblog{% endblock %} - symblog</title>
 
-The first thing you'll notice is the alien ``{%`` tag. Its not HTML, and its
-definitely not PHP. This is one of the 3 Twig tags. This tag is the Twig
-``Do something`` tag. It is used to execute statements such as control statements and
-for defining block elements. A full list of
-`control structures <http://www.twig-project.org/doc/templates.html#list-of-control-structures>`_
-can be found in the Twig Documentation. The Twig block we have defined in the
-title does 2 things; It sets the block identifier to title, and provides a
-default output between the block and endblock directives. By defining a block we
-can take advantage of Twig's inheritance model. For example, on a page to
-display a blog post we would want the page title to reflect the title of the
-blog. We can achieve this by extending the template and overriding the title block.
+第一个会注意到的是奇怪的 ``{%`` 标签，它即不是 HTML，也不可能是 PHP 。这是 3 个 Twig 标签中的一个，这个标签在 Twig 中表示
+ ``Do something``，也就是用来放置执行控制语法或是定义区块元素的指令。完整的
+`控制结构 <http://www.twig-project.org/doc/templates.html#list-of-control-structures>`_
+可以在 Twig 手册看到。我们在 title 标签定义的 Twig 区域会做两件事情，它不仅将区域命名为 title，而且在 block 与 endblock
+之间提供了一个默认输出指令，通过划分各个区域，我们就可以充分利用 Twig 继承模式的好处。举例来说，在一篇博客文章我们想要反映页面标题
+，就可以继承该模板并且覆盖 title 区域。
 
 .. code-block:: html
 
@@ -476,52 +373,40 @@ blog. We can achieve this by extending the template and overriding the title blo
 
     {% block title %}The blog title goes here{% endblock %}
 
-In the above example we have extended the applications base template that first
-defined the title block. You'll notice the template format used with the
-``extends`` directive is missing the ``Bundle`` and the ``Controller`` parts,
-remember the template format is ``bundle:controller:template``. By excluding the
-``Bundle`` and the ``Controller`` parts we are specifiying the use of the application
-level templates defined at ``app/Resources/views/``.
+在上面的例子中，我们继承了应用程序的基本模板和前面定义的 title 区域。你会注意到 ``extends`` 使用的模板格式少了
+``Bundle`` 与 ``Controller`` 部分，而基本模板格式是 ``bundle:controller:template``。如果省略了 ``Bundle`` 与
+ ``Controller`` 部分，就是指定要使用应用程序层级的模板，存放位置为 ``app/Resources/views/`` 。
 
-Next we have defined another title block and put in some
-content, in this case the blog title. As the parent template already
-contains a title block, it is overridden by our new one. The title would now
-output as 'The blog title goes here - symblog'. This functionality provided by
-Twig will be used extensively when creating templates.
+接下来我们定义另外一个 title 区域，并且放入一些内容，这里是放入博客的标题。由于父模板已经包含了 title 区域，它会被我们
+的新模板所覆盖， title 区域现在会输出 'The blog title goes here - symblog' 。Twig 提供的这项功能在建立模板时可以灵活运用。
 
-In the stylesheets block we are introduced to the next Twig tag, the ``{{`` tag,
-or the ``Say something`` tag.
+在样式表区块我们加入了下一个 Twig 标签 ``{{`` ，也被称之为 ``Say something`` 标签。
 
 .. code-block:: html
 
     <link href="{{ asset('css/screen.css') }}" type="text/css" rel="stylesheet" />
 
-This tag is used to print the value of variable or expression. In the above example
-it prints out the return value of the ``asset`` function, which provides us with
-a portable way to link to the application assets, such as CSS, JavaScript, and images.
+这个标签用来打印出变量或表达式的值。上面的例子中会打印 ``asset`` 方法回传的值，这提供了一个链接应用
+程序资源的便捷方法，例如 CSS 、 JavaScript 与图片文件。
 
-The ``{{`` tag can also be combined with filters to manipulate the output before
-printing.
+``{{`` 标签也可以配合过滤器在输出前处理内容。
 
 .. code-block:: html
 
     {{ blog.created|date("d-m-Y") }}
 
-For a full list of filters check the
-`Twig Documentation <http://www.twig-project.org/doc/templates.html#list-of-built-in-filters>`_.
+完整的过滤器清单可以参考
+`Twig 手册 <http://www.twig-project.org/doc/templates.html#list-of-built-in-filters>`_ 。
 
-The last Twig tag, which we have not seen in the templates is the comment tag ``{#``.
-Its usage is as follows:
+最后一个 Twig 标签并没有出现在模板中，它是备注标签 ``{#`` ，像这样使用：
 
 .. code-block:: html
 
     {# The quick brown fox jumps over the lazy dog #}
 
-No other concepts are introduced in this template. It provides the main
-layout ready for us to customise it as we need.
+模板中不会再有其他概念，这个模板已经准备好主要布局，让我们可以在需要时进行定制。
 
-Next lets add some styles. Create a stylesheet at ``web/css/screen.css`` and add
-the following content. This will add styles for the main template.
+接下来添加一些样式，先建立一个样式表并保存为 ``web/css/screen.css`` 文件，然后添加下面内容，这会在主要模板中加入一些样式。
 
 .. code-block:: css
 
@@ -554,12 +439,11 @@ the following content. This will add styles for the main template.
 
     #footer { border-top: 1px solid #ccc; clear: both; text-align: center; padding: 10px; color: #aaa; }
 
-Bundle Template - Level 2
+软件包模板 - 第 2 层
 .........................
 
-We now move onto creating the layout for the Blog bundle. Create a file located at
-``src/Blogger/BlogBundle/Resources/views/layout.html.twig`` and add the
-following content.
+我们现在继续建立博客软件包的布局，建立一个文件 ``src/Blogger/BlogBundle/Resources/views/layout.html.twig``
+然后放入下面内容。
 
 .. code-block:: html
 
@@ -570,32 +454,23 @@ following content.
         Sidebar content
     {% endblock %}
 
-At a first glance this template may seem a little simple, but its simplicity is
-the key. Firstly it extends the applications base template that we created earlier.
-Secondly it overrides the parent sidebar block with some dummy content. As the
-sidebar will be present on all pages of our blog it makes sense to perform the
-customisation at this level. You may ask why don't we just put the customisation
-in the application template as it will be present on all pages. This is simple,
-the application knows nothing about the Bundle and shouldn't. The Bundle should
-self contain all its functionality and rendering the sidebar is part of this
-functionality. OK, so why don't we just place the sidebar in each of the page
-templates? Again this is simple, we would have to duplicate the sidebar each
-time we added a page. Further this level 2 template gives us the flexibility in
-the future to add other customisations that all children templates will inherit.
-For example, we may want to change the footer copy on all pages, this would be a
-great place to do this.
 
-Page Template - Level 3
+第一眼看到这个模板时也许会觉得过于简单，但简单正是它的关键之处。
+第一、它继承了我们之前建立的应用程序基本模板，其次、
+它用一些测试内容覆盖了原本的 sidebar 区块。由于 sidebar 会出现在博客的所有页面，通常这个阶段在这一层上做些定制是正确的做法。
+你也许会问为什么不把定制的部分放在之前的应用程序模板，这样一来就可以出现在所有页面。原因很简单，应用程序并不知道
+软件包的任何信息，也不应该知道这些信息。软件包应该要自己包含自身的所有功能，产生 sidebar 区块就是自身的功能之一。
+至于为什么不将它放在每一页的模板，这也很简单，因为这样一来我们建立一个新页面时就得复制 sidebar 一次。更进一步来说，
+这个第 2 层模板提供了相应的灵活度，让我们可以添加所有子模板都会用到的信息并且让它们能够继承。举例来说，我们也许想要调整每一页的页尾，这时就适合在这个层面上调整。
+
+页面模板 - 第 3 层
 .......................
 
-Finally we are ready for the controller layout. These layouts will commonly be
-related to a controller action, i.e., the blog show action will have a
-blog show template.
+最后我们准备好制作控制器的布局，这些布局通常会跟控制器的方法产生关联，例如 show 方法就会对应到
+一个博客的模板 show 文件。
 
-Lets start by creating the controller for the homepage and its template. As this
-is the first page we are creating we need to create the controller. Create the
-controller at ``src/Blogger/BlogBundle/Controller/PageController.php`` and add
-the following:
+我们开始建立首页的控制器与模板，由于这是我们第一个建立的页面，我们需要同时建立对应的控制器。为控制器
+建立 ``src/Blogger/BlogBundle/Controller/PageController.php`` 文件，并且写入下面内容：
 
 .. code-block:: php
 
@@ -614,9 +489,7 @@ the following:
         }
     }
 
-Now create the template for this action. As you can see in the controller action
-we are going to render the Page index template. Create the template at
-``src/Blogger/BlogBundle/Resources/views/Page/index.html.twig``
+接下来建立该操作的模板。如同在控制器对应操作中看到的，我们要建立用来产生首页的模板，并把它放在 ``src/Blogger/BlogBundle/Resources/views/Page/index.html.twig`` 文件中。
 
 .. code-block:: html
 
@@ -627,14 +500,13 @@ we are going to render the Page index template. Create the template at
         Blog homepage
     {% endblock %}
 
-This introduces the final template format we can specify. In this example
-the template ``BloggerBlogBundle::layout.html.twig`` is extended where
-the ``Controller`` part of the template name is ommitted. By excluding the
-``Controller`` part we are specifiying the use of the Bundle level template
-created at ``src/Blogger/BlogBundle/Resources/views/layout.html.twig``.
 
-Now lets add a route for our homepage. Update the Bundle routing config located
-at ``src/Blogger/BlogBundle/Resources/config/routing.yml``.
+这里导入了我们最后指定的模板。在这个例子中，
+模板 ``BloggerBlogBundle::layout.html.twig``
+继承来源的名称省略了 ``Controller`` 部分。当我们排除了 ``Controller`` 部分时，我们就是在指定使用软件包
+层上的模板，它被放在 ``src/Blogger/BlogBundle/Resources/views/layout.html.twig`` 。
+
+接下来为我们的首页新增一个路由，更新软件包路由配置在 ``src/Blogger/BlogBundle/Resources/config/routing.yml``
 
 .. code-block:: yaml
 
@@ -645,35 +517,27 @@ at ``src/Blogger/BlogBundle/Resources/config/routing.yml``.
         requirements:
             _method:  GET
 
-Lastly we need to remove the default route for the Symfony2 welcome screen.
-Remove the ``_welcome`` route at the top of the ``dev`` routing file located at
-``app/config/routing_dev.yml``.
+最后我们需要移除默认的 Symfony2 欢迎页面路由，也就是移除路由文件 ``app/config/routing_dev.yml`` 中 ``dev`` 区域的  ``_welcome`` 路由。
 
-We are now ready to view our blogger template. Point your browser to
-``http://symblog.dev/app_dev.php/``.
+我们现在已经可以查看博客的模板，用你的浏览器打开 ``http://symblog.dev/app_dev.php/`` 。
 
 .. image:: /_static/images/part_1/homepage.jpg
     :align: center
     :alt: symblog main template layout
 
-You should see the basic layout of the blog, with
-the main content and sidebar reflecting the blocks we have overridden in the relevant
-templates.
+你应该可以看到博客的基本模板，包含我们在相关模板重写的主要内容与 sidebar 对应的区域。
 
-The About Page
+“关于”页面
 --------------
 
-The final task in this part of the tutorial will be creating a static page for the
-about page. This will demonstrate how to link pages together, and further enforce the
-Three Level Inheritance approach we have adopted.
+本章的最后一项任务就是建立一个“关于”的静态页面，这将展示如何将页面链接在一起，并进一步强调我们所用的三层继承法。
 
-The Route
+路由
 ~~~~~~~~~
 
-When creating a new page, one of the first tasks should be creating the route for it.
-Open up the ``BloggerBlogBundle`` routing file located at
-``src/Blogger/BlogBundle/Resources/config/routing.yml`` and append the following routing
-rule.
+
+建立一个新页面时，首先应该建立对应的路由。打开 ``BloggerBlogBundle`` 的路由文件
+``src/Blogger/BlogBundle/Resources/config/routing.yml`` 并且添加下面的路由规则。
 
 .. code-block:: yaml
 
@@ -684,12 +548,12 @@ rule.
         requirements:
             _method:  GET
 
-The Controller
+控制器
 ~~~~~~~~~~~~~~
 
-Next open the ``Page`` controller located at
-``src/Blogger/BlogBundle/Controller/PageController.php`` and add the action
-to handle the about page.
+接著开启 ``Page`` 控制器，文件位于 ``src/Blogger/BlogBundle/Controller/PageController.php`` 并且新增处理“关于”
+页面的方法。
+
 
 .. code-block:: php
 
@@ -704,12 +568,10 @@ to handle the about page.
         }
     }
 
-The View
+视图
 ~~~~~~~~
 
-For the view, create a new file located at
-``src/Blogger/BlogBundle/Resources/views/Page/about.html.twig`` and copy in the
-following content.
+要建立视图，在 ``src/Blogger/BlogBundle/Resources/views/Page/about.html.twig`` 建立模板，并且复制下面内容。
 
 .. code-block:: html
 
@@ -735,18 +597,17 @@ following content.
         </article>
     {% endblock %}
 
-The about page is nothing spectacular. Its only action is to render a template file
-with some dummy content. It does however bring us on to the next task.
+“关于”页面并没有特别之处，唯一的用处只是用测试内容产生模板文件。不过它依然可以带我们继续前进到下一个任务。
 
-Linking the pages
+
+链接这些页面
 ~~~~~~~~~~~~~~~~~
 
-We now have the about page ready to go. Have a look at ``http://symblog.dev/app_dev.php/about``
-to see this. As it stands there is no way for a user of your blog to view the about page,
-short of typing in the full URL just like we did. As you'd expect Symfony2 provides both
-sides to the routing equation. It can match routes as we have seen, and can also
-generate URLs from these routes. You should always use the routing functions provided
-by Symfony2. Never in your application should you be tempted to put the following.
+
+我们现在已经有了“关于”页面，可以直接查看 ``http://symblog.dev/app_dev.php/about`` 上的信息。一般用户看不到这个页面
+，除非像我们这样手动输入完整的地址。可以预料到的是 Symfony2 提供了两处对等的路由功能，它可以让我们比对所看到的路径，也可以产生
+这些路径所对应的网址。建议一定使用 Symfony2 的路由功能，而不要在程序中使用如下链接：
+
 
 .. code-block:: html+php
 
@@ -754,24 +615,17 @@ by Symfony2. Never in your application should you be tempted to put the followin
 
     <?php $this->redirect("/contact"); ?>
 
-You may be wondering what's wrong with this approach, it may be the way you always
-link your pages together. However, there are a number of problems with this approach.
+你也许想知道这个方法错在哪里。上面也许是你经常用来链接页面的方式，不过这个方法会有下面问题：
 
-1. It uses a hard link and ignores the Symfony2 routing system entirely. If you wanted to change
-   the location of the contact page at any point you would have to find all references to the hard
-   link and change them.
-2. It will ignore your environment controllers. Environments is something we haven't really explained yet
-   but you have been using them. The ``app_dev.php`` front controller provides us access to our application
-   in the ``dev`` environment. If you were to replace the ``app_dev.php`` with ``app.php`` you will be
-   running the application in the ``prod`` environment. The significance of these environments will
-   be explained further in the tutorial but for now it's important to note that the hard link
-   defined above does not maintain the current environment we are in as the front controller is
-   not prepended to the URL.
+1. 它使用了绝对链接并且完全忽略了 Symfony2 的路由系统，如果你想要修改联系我们页面的位置，你必需要找到所有使用绝对
+   链接的位置并且进行修改。
+   
+2. 它会忽略环境中的控制器，虽然我们还没解释环境是什么，但是你已经在使用了。 ``app_dev.php`` 前端控制器
+   让我们可以在 ``dev`` 环境中访问应用程序。如果你把 ``app_dev.php`` 改为 ``app.php`` ，应用程序就会在 ``prod`` 环境
+   下执行。环境的重要性会在后面的教程中作更多的说明，不过现在重要的是需要注意，上面定义的实际链接不会依据我们目前的环境调整，因为前端控制器并没有包含在网址中。
 
-The correct way to link pages together is with the ``path`` and ``url`` methods provided by Twig. They are
-both very similar, except the ``url`` method will provide us with absolute URLs. Lets
-update the main application template located at ``app/Resources/views/base.html.twig`` to link
-to the about page and homepage together.
+链接页面的正确方法是使用 Twig 提供的 ``path`` 与 ``url`` 方法，它们都很类似，只是 ``url`` 方法会给我们完整的网址。我们来
+调整主应用程序模板 ``app/Resources/views/base.html.twig`` 为“关于”与首页建立链接。
 
 .. code-block:: html
 
@@ -786,13 +640,10 @@ to the about page and homepage together.
         </nav>
     {% endblock %}
 
-Now refresh your browser to see the Home and About page links working as expected. If you view the source
-for the pages you will notice the link has been prefixed with ``/app_dev.php/``. This
-is the front controller I was explaining above, and as you can see the use of ``path`` has maintained
-it.
+接下来刷新浏览器，就可以看到 Home 与 About 页面链接就可以运作了，如果你查看页面源代码就会发现，链接的前面都加上了 ``/app_dev.php/`` ，
+这就是上面提到的前端控制器，而且会看到 ``path`` 的使用会处理这个部分。
 
-Finally lets update the logo links to redirect you back to the homepage. Update the
-template located at ``app/Resources/views/base.html.twig``.
+最后让我们更新首页的主视图链接，更新位于 ``app/Resources/views/base.html.twig`` 的模板。
 
 .. code-block:: html
 
@@ -801,14 +652,10 @@ template located at ``app/Resources/views/base.html.twig``.
         <h2>{% block blog_title %}<a href="{{ path('BloggerBlogBundle_homepage') }}">symblog</a>{% endblock %}</h2>
         <h3>{% block blog_tagline %}<a href="{{ path('BloggerBlogBundle_homepage') }}">creating a blog in Symfony2</a>{% endblock %}</h3>
     </hgroup>
-    
-Conclusion
+
+结论
 ----------
 
-We have covered the basic areas with regards to a Symfony2 application including getting
-the application configured and up and running. We have started to explore the fundamental concepts
-behind a Symfony2 application, including Routing and the Twig templating engine.
+我们已经涵盖了 Symfony2 应用程序的基础部分，包括配置与执行，并且开始探索 Symfony2 应用程序背后的一些基础概念，如路由与 Twig 模板引擎。
 
-Next we will look at creating the Contact page. This page is slightly more involved than the About page
-as it allows users to interact with a web form to send us enquiries. The next chapter will introduce
-concpets including Validators and Forms.
+接着，我们会介绍如何建立一个“联系我们”页面，这个页面比“关于”更加深入，它让使用者可以通过网页表单发送请求互动，下一节会介绍字段验证与表单的有关内容。
